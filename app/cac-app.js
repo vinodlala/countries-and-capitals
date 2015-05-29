@@ -51,8 +51,6 @@ angular.module('cacApp', ['ngRoute', 'ngAnimate'])
         function ($location, $http, API_PREFIX, LIST_COUNTRIES, USER_NAME) {
             var countries = [];
             var countryResult = {};
-            //var path = 'http://api.geonames.org/countryInfoJSON?username=vinod_lala';
-            //var path = API_PREFIX + '/countryInfoJSON?username=vinod_lala';
             var path = API_PREFIX + LIST_COUNTRIES + USER_NAME;
             var i;
             $http.get(path, {cache: true})
@@ -87,99 +85,19 @@ angular.module('cacApp', ['ngRoute', 'ngAnimate'])
             };
         }])
 
-
-    //.factory('capitalPopInfo', ['countryInfo', 'countryNeighbor', '$http', '$location', function (countryInfo, countryNeighbor, $http, $location) {
-    .factory('capitalPopInfo', ['countryInfo', 'countryNeighbors', '$http', '$location', function (countryInfo, countryNeighbors, $http, $location) {
-        var popResult = {};
-
-        var getCapPopInfo = function (counCode, capName, countryName) {
-            var resultTemp = countryInfo.getCountry(countryName);
-            //var neighbor = countryNeighbor.getNeighbor(countryName);
-            var neighbors = countryNeighbors.getNeighbors(countryName);
-
-            var path = 'http://api.geonames.org/searchJSON?';
-            var request = {
-                q: capName,
-                country: counCode, // two-character country code
-                fcode: 'pplc', //capital of a political entity
-                //featurecode: 'pplc', //capital of a political entity
-                username: 'vinod_lala'
-            };
-
-            $http({
-                method: 'GET',
-                url: path,
-                cache: true,
-                params: request
-            })
-                .success(function (data) {
-
-                    if (capName) {
-                        popResult.counName = data.geonames[0].countryName;
-                        popResult.capPop = data.geonames[0].population;
-                        popResult.cap = capName;
-                    } else {
-                        popResult.counName = countryName;
-                        popResult.capPop = 0;
-                        popResult.cap = 'N/A';
-                    }
-                })
-                .error(function () {
-                    console.log('Error status: ' + status);
-                    $location.path('/error');
-                });
-
-
-            popResult.counPop = resultTemp.population;
-            popResult.counArea = resultTemp.areaInSqKm;
-            //popResult.counNeighbor = neighbor;
-            popResult.counNeighbors = neighbors;
-            popResult.counCode = counCode;
-
-
-            return popResult;
-
-        };
-
-
-        return {
-            getCapPopInfo: getCapPopInfo
-        };
-
-    }])
-
-
-
-
-
-
-
-
-
-
-    //.factory('capitalPopInfo', ['countryInfo', 'countryNeighbor', '$http', '$location', function (countryInfo, countryNeighbor, $http, $location) {
     .factory('capitalPopulation', ['countryInfo', 'countryNeighbors', '$http', '$location', function (countryInfo, countryNeighbors, $http, $location) {
-        //var popResult = {};
-        //var popResult = 0;
 
-        //var getCapitalPopulation = function (counCode, capName, countryName) {
         var getCapitalPopulation = function (countryCode, capital) {
 
-            debugger;
-            var popResult = 0;
-
-            //var resultTemp = countryInfo.getCountry(countryName);
-            //var neighbor = countryNeighbor.getNeighbor(countryName);
-            //var neighbors = countryNeighbors.getNeighbors(countryName);
+            //debugger;
+            var capitalPopulation = 0;
 
             var path = 'http://api.geonames.org/searchJSON?';
             var request = {
-                //q: capName,
                 q: capital,
-                //country: counCode, // two-character country code
                 country: countryCode, // two-character country code
-                fcode: 'pplc', //capital of a political entity
                 //featurecode: 'pplc', //capital of a political entity
+                fcode: 'pplc', //capital of a political entity
                 username: 'vinod_lala'
             };
 
@@ -190,22 +108,16 @@ angular.module('cacApp', ['ngRoute', 'ngAnimate'])
                 params: request
             })
                 .success(function (data) {
-                    debugger;
+                    //debugger;
 
                     if (capital) {
-                        //popResult.counName = data.geonames[0].countryName;
-                        //popResult.capPop = data.geonames[0].population;
-                        debugger;
-                        popResult = data.geonames[0].population;
-                        debugger;
-                        //popResult.cap = capName;
+                        //debugger;
+                        capitalPopulation = data.geonames[0].population;
+                        //debugger;
                     } else {
-                        //popResult.counName = countryName;
-                        //popResult.capPop = 0;
-                        debugger;
-                        popResult = 0;
-                        debugger;
-                        //popResult.cap = 'N/A';
+                        //debugger;
+                        capitalPopulation = 0;
+                        //debugger;
                     }
                 })
                 .error(function () {
@@ -213,43 +125,25 @@ angular.module('cacApp', ['ngRoute', 'ngAnimate'])
                     $location.path('/error');
                 });
 
-            debugger;
-            //popResult.counPop = resultTemp.population;
-            //popResult = resultTemp.population;
-            //popResult.counArea = resultTemp.areaInSqKm;
-            //popResult.counNeighbor = neighbor;
-            //popResult.counNeighbors = neighbors;
-            //popResult.counCode = counCode;
-
-            debugger;
-            return popResult;
+            //debugger;
+            return capitalPopulation;
+            //debugger;
 
         };
 
 
         return {
-            //getCapPopInfo: getCapPopInfo
             getCapitalPopulation: getCapitalPopulation
         };
 
     }])
 
-
-
-
-
-
-
-
-    //.factory('countryNeighbor', ['$http', 'countryInfo', '$location', function ($http, countryInfo, $location) {
     .factory('countryNeighbors', ['$http', 'countryInfo', '$location', function ($http, countryInfo, $location) {
         var i;
 
-        debugger;
-        //var getNeighbor = function (countryName) {
+        //debugger;
         var getNeighbors = function (countryName) {
-            debugger;
-            //var neighborResult = [];
+            //debugger;
             var neighbors = [];
             var geoId = countryInfo.getCountry(countryName).geonameId;
             //debugger;
@@ -262,7 +156,6 @@ angular.module('cacApp', ['ngRoute', 'ngAnimate'])
             };
 
             if (countryName == 'Antarctica') {
-                //neighborResult = [];
                 neighbors = [];
             } else {
                 $http({
@@ -274,19 +167,10 @@ angular.module('cacApp', ['ngRoute', 'ngAnimate'])
                     .success(function (data) {
                         //debugger;
                         if (data.geonames.length === 0) {
-                            //neighborResult = [];
                             neighbors = [];
                         } else {
                             for (i = 0; i < data.geonames.length; i++) {
-                                //if (data.geonames.length >= 3) {
-                                //    neighborResult[0] = data.geonames[0].countryName;
-                                //    neighborResult[1] = data.geonames[1].countryName;
-                                //    neighborResult[2] = data.geonames[2].countryName;
-                                //    break;
-                                //} else {
-                                //    neighborResult[i] = data.geonames[i].countryName;
-                                //}
-                                debugger;
+                                //debugger;
                                 neighbors[i] = data.geonames[i].countryName;
                             }
                         }
@@ -299,15 +183,13 @@ angular.module('cacApp', ['ngRoute', 'ngAnimate'])
 
             }
 
-            //return neighborResult;
-            debugger;
+            //debugger;
             return neighbors;
-            debugger;
+            //debugger;
         };
 
 
         return {
-            //getNeighbor: getNeighbor
             getNeighbors: getNeighbors
         };
 
@@ -321,36 +203,16 @@ angular.module('cacApp', ['ngRoute', 'ngAnimate'])
             }
         }])
 
-    //.controller('countryCtrl', ['$scope', 'countryInfo', 'capitalPopInfo', 'countryNeighbor', '$routeParams',
-    .controller('countryCtrl', ['$scope', 'countryInfo', 'capitalPopInfo', 'countryNeighbors', 'capitalPopulation', '$routeParams',
-        function ($scope, countryInfo, capitalPopInfo, countryNeighbors, capitalPopulation, $routeParams) {
-
-            //var countryCodeShow = countryInfo.getCountry($routeParams.country).countryCode;
-            //var capitalShow = countryInfo.getCountry($routeParams.country).capital || '';
-            //var countryNameShow = countryInfo.getCountry($routeParams.country).countryName;
-
-            //$scope.detailShow = capitalPopInfo.getCapPopInfo(countryCodeShow, capitalShow, countryNameShow);
-
-
+    .controller('countryCtrl', ['$scope', 'countryInfo', 'countryNeighbors', 'capitalPopulation', '$routeParams',
+        function ($scope, countryInfo, countryNeighbors, capitalPopulation, $routeParams) {
 
             //debugger;
-            //var country = countryInfo.getCountry($routeParams.country);
             var country = countryInfo.getCountry($routeParams.country);
-            var countryCodeShow2 = country.countryCode;
-            var capitalShow2 = country.capital || '';
-            var countryNameShow2 = country.countryName;
-            //$scope.countryDetails = {};
-
-            //$scope.country = capitalPopInfo.getCapPopInfo(countryCodeShow2, capitalShow2, countryNameShow2);
             $scope.country = country;
             //debugger;
-            //$scope.country.neighbors = countryNeighbors.getNeighbors(country.countryName);
             $scope.country.neighbors = countryNeighbors.getNeighbors(country.countryName);
-            debugger;
+            //debugger;
             $scope.country.capitalPopulation = capitalPopulation.getCapitalPopulation(country.countryCode, country.capital);
-            debugger;
-            //$scope.detailShow = capitalPopInfo.getCapPopInfo(countryCodeShow2, capitalShow2, countryNameShow2);
-
-
+            //debugger;
         }])
 ;
