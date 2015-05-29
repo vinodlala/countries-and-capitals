@@ -1,0 +1,30 @@
+<div>
+    <div>
+        <span>Filter:</span><input type="text" ng-model="search">
+    </div>
+    <table>
+        <thead>
+        <tr>
+            <th>Name</th>
+            <th>Country Code</th>
+            <th>Capital</th>
+            <th>Area in km<sup>2</sup></th>
+            <th>Population</th>
+            <th>Continent</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr ng-repeat="country in countries | filter:search" ng-click="goToCountry(country.countryName)">
+            <td>{{country.countryName}}</td>
+            <td>{{country.countryCode}}</td>
+            <td>{{country.capital}}</td>
+            <td>{{country.areaInSqKm | number:0}}</td>
+            <td>{{country.population | number:0}}</td>
+            <td>{{country.continent}}</td>
+        </tr>
+
+        </tbody>
+    </table>
+</div>
+
+<a href="#/" class="button">Home</a>

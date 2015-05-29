@@ -1,0 +1,90 @@
+<div ng-class="{loading: isLoading}">
+    <div ng-show="!isLoading">
+
+        <div>
+            <div>country.countryName: {{ country.countryName }}</div>
+            <div>country.population: {{ country.population | number:0 }}</div>
+            <div>country.areaInSqKm: {{ country.areaInSqKm | number:0 }}</div>
+            <div>country.capital: {{ country.capital }}</div>
+            <div>country.capitalPopulation: {{ country.capitalPopulation }}</div>
+            <div>country.neighbors.length: {{ country.neighbors.length }}</div>
+            <div>country.neighbors: {{ country.neighbors }}</div>
+
+
+            <img class="col-sm-offset-1 col-sm-5 col-md-offset-2 col-md-3 col-md-offset-2" id="map"
+                 ng-src="http://www.geonames.org/img/country/250/{{ country.countryCode | uppercase}}.png"/>
+
+            <img class="col-sm-5 col-md-3" id="flag"
+                 ng-src="http://www.geonames.org/flags/x/{{ country.countryCode | lowercase}}.gif"/>
+
+        </div>
+
+
+        <!--<h2>{{detailShow.counName}}</h2>-->
+
+        <div class="row">
+            <!--<p class="col-xs-offset-1 col-x s-4" style="text-align:right">Population of Country:</p>-->
+
+            <!--<p class="col-xs-6 col-xs-offset-1" style="text-align:left">{{detailShow.counPop | number:0}}</p>-->
+            <!--<br/>-->
+            <!--<br/>-->
+            <!--<br/>-->
+            <!--<br/>-->
+
+            <!--<p class="col-xs-offset-1 col-xs-4" style="text-align:right">Area:</p>-->
+
+            <!--<p class="col-xs-6 col-xs-offset-1" style="text-align:left">{{detailShow.counArea | number:0}} &nbsp;km<sup>2</sup>-->
+            <!--</p>-->
+            <!--<br/>-->
+            <!--<br/>-->
+            <!--<br/>-->
+            <!--<br/>-->
+
+            <!--<p class="col-xs-offset-1 col-xs-4" style="text-align:right">Capital:</p>-->
+
+            <!--<p class="col-xs-6 col-xs-offset-1" style="text-align:left">{{detailShow.cap}}</p>-->
+            <!--<br/>-->
+            <!--<br/>-->
+            <!--<br/>-->
+            <!--<br/>-->
+
+            <!--<p class="col-xs-offset-1 col-xs-4" style="text-align:right">Population of Capital:</p>-->
+
+            <!--<p class="col-xs-6 col-xs-offset-1" style="text-align:left">{{detailShow.capPop | number:0}}</p>-->
+            <!--<br/>-->
+            <!--<br/>-->
+            <!--<br/>-->
+            <!--<br/>-->
+
+            <!--<p class="col-xs-offset-1 col-xs-4" style="text-align:right">Neighbor Countries (up to 3):</p>-->
+
+            <!--<p class="col-xs-4 col-xs-offset-1" style="text-align:left">-->
+                <!--<a ng-repeat="neighbor in detailShow.counNeighbor" ng-href="#/countries/{{neighbor}}">-->
+                    <!--&nbsp;&nbsp;{{neighbor}}&nbsp;&nbsp;-->
+                <!--</a>-->
+            <!--</p>-->
+            <!--<br/>-->
+            <!--<br/>-->
+            <!--<br/>-->
+            <!--<br/>-->
+            <img class="col-sm-offset-1 col-sm-5 col-md-offset-2 col-md-3 col-md-offset-2" id="map"
+                 ng-src="http://www.geonames.org/img/country/250/{{detailShow.counCode | uppercase}}.png"/>
+
+            <img class="col-sm-5 col-md-3" id="flag"
+                 ng-src="http://www.geonames.org/flags/x/{{detailShow.counCode | lowercase}}.gif"/>
+
+            <!--<a href="#/" class="button col-xs-offset-3 col-xs-3">Home</a>-->
+            <!--<br/>-->
+            <!--<br/>-->
+            <!--<br/>-->
+            <!--<a href="#/countries" class="button col-xs-offset-3 col-xs-3">Browse Countries</a>-->
+
+
+        </div>
+
+
+    </div>
+</div>
+
+<a href="#/countries" class="button">Browse Countries</a>
+<a href="#/" class="button">Home</a>
