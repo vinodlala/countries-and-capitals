@@ -38,6 +38,7 @@ angular.module('cacApp', ['ngRoute', 'ngAnimate'])
         });
     })
 
+    // use these more
     .constant('API_PREFIX', 'http://api.geonames.org')
 
     .constant('LIST_COUNTRIES', '/countryInfoJSON?')
@@ -86,12 +87,9 @@ angular.module('cacApp', ['ngRoute', 'ngAnimate'])
         }])
 
     .factory('capitalPopulation', ['countryInfo', 'countryNeighbors', '$http', '$location', function (countryInfo, countryNeighbors, $http, $location) {
-
         var getCapitalPopulation = function (countryCode, capital) {
-
             //debugger;
             var capitalPopulation = 0;
-
             var path = 'http://api.geonames.org/searchJSON?';
             var request = {
                 q: capital,
@@ -100,7 +98,6 @@ angular.module('cacApp', ['ngRoute', 'ngAnimate'])
                 fcode: 'pplc', //capital of a political entity
                 username: 'vinod_lala'
             };
-
             $http({
                 method: 'GET',
                 url: path,
@@ -109,7 +106,6 @@ angular.module('cacApp', ['ngRoute', 'ngAnimate'])
             })
                 .success(function (data) {
                     //debugger;
-
                     if (capital) {
                         //debugger;
                         capitalPopulation = data.geonames[0].population;
@@ -124,37 +120,30 @@ angular.module('cacApp', ['ngRoute', 'ngAnimate'])
                     console.log('Error status: ' + status);
                     $location.path('/error');
                 });
-
             //debugger;
             return capitalPopulation;
             //debugger;
-
         };
-
-
         return {
             getCapitalPopulation: getCapitalPopulation
         };
-
     }])
 
     .factory('countryNeighbors', ['$http', 'countryInfo', '$location', function ($http, countryInfo, $location) {
         var i;
-
         //debugger;
         var getNeighbors = function (countryName) {
             //debugger;
             var neighbors = [];
+            // do I really need geonameId?
             var geoId = countryInfo.getCountry(countryName).geonameId;
             //debugger;
-
             var path = 'http://api.geonames.org/neighboursJSON?';
             var request = {
                 geonameId: geoId,
                 country: countryName,
                 username: 'vinod_lala'
             };
-
             if (countryName == 'Antarctica') {
                 neighbors = [];
             } else {
@@ -180,19 +169,14 @@ angular.module('cacApp', ['ngRoute', 'ngAnimate'])
                         console.log('Error status: ' + status);
                         $location.path('/error');
                     });
-
             }
-
             //debugger;
             return neighbors;
             //debugger;
         };
-
-
         return {
             getNeighbors: getNeighbors
         };
-
     }])
 
     .controller('countriesCtrl', ['countryInfo', '$scope', '$location', '$rootScope', '$timeout',
