@@ -11,15 +11,12 @@
 
             <div>country.capital: {{ country.capital }}</div>
 
-            <div>country.capitalPopulation: {{ country.capitalPopulation }}</div>
-            <div>capitalPopulation: {{ country.capitalPopulation }}</div>
+            <div>country.capitalInfo.population: {{ country.capitalInfo.population }}</div>
 
-            <div>country.neighbors.length: {{ country.neighbors.length }}</div>
+            <div>neighbors.length: {{ neighbors.length }}</div>
 
-            <div>country.neighbors: {{ country.neighbors }}</div>
-
-            <div ng-repeat="neighbor in country.neighbors">
-                <a ng-href="#/countries/{{neighbor}}">{{ neighbor }}</a>&nbsp;
+            <div ng-repeat="neighbor in neighbors">
+                <a ng-href="#/countries/{{neighbor.countryCode}}">{{ neighbor.countryName }}</a>&nbsp;
             </div>
 
             <img ng-src="http://www.geonames.org/img/country/250/{{ country.countryCode | uppercase}}.png"/>

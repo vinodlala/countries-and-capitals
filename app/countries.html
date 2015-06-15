@@ -14,7 +14,7 @@
         </tr>
         </thead>
         <tbody>
-        <tr ng-repeat="country in countries | filter:search" ng-click="goToCountry(country.countryName)">
+        <tr ng-repeat="country in countries | filter:search" ng-click="goToCountry(country.countryCode)">
             <td>{{country.countryName}}</td>
             <td>{{country.countryCode}}</td>
             <td>{{country.capital}}</td>

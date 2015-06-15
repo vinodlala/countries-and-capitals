@@ -16,21 +16,25 @@ angular.module('cacApp', ['ngRoute', 'ngAnimate'])
                 controller: 'countryCtrl',
                 resolve: {
 
-                    //country: function (getCapital, getCountry, $route) {
-                    //    return getCountry($route.current.params.country)
-                    //        .then(function (country) {
-                    //            return getCapital(country);
-                    //        });
-                    //},
-                    //
-                    //neighbors: function (getNeighbors, $route) {
-                    //    return getNeighbors($route.current.params.country);
-                    //}
+                    country: function (getCapital, getCountry, $route) {
+                        return getCountry($route.current.params.country)
+                            .then(function (country) {
+                                return getCapital(country).then(function (capital) {
+                                    country.capitalInfo = capital;
+                                    return country;
+                                });
 
+                            });
+                    },
 
-                    country: function (getCountry, $route) {
-                        return getCountry($route.current.params.country);
+                    neighbors: function (getNeighbors, $route) {
+                        return getNeighbors($route.current.params.country);
                     }
+
+
+                    //country: function (getCountry, $route) {
+                    //    return getCountry($route.current.params.country);
+                    //}
                     //capital: function (getCapital, $route) {
                     //    return getCapital($route.current.params.country);
                     //return getCapital(country);
@@ -88,32 +92,26 @@ angular.module('cacApp', ['ngRoute', 'ngAnimate'])
         }
     })
     .factory('getCountry', function (getCountries, $route) {
-        return function (countryName) {
+        return function (countryCode) {
             return getCountries()
                 .then(function (countries) {
                     var countryResult, i;
                     for (i = 0; i < countries.length; i++) {
-                        if (countries[i].countryName === countryName) {
+                        if (countries[i].countryCode === countryCode) {
                             countryResult = countries[i];
                             break;
                         }
                     }
                     return countryResult;
                 })
-                .then(console.log("after"));
+            //.then(console.log("after"));
             //.then(getCapital)
         }
     })
     //.factory('getCapital', function ($http, $q, API_PREFIX, SEARCH, USER_NAME) {
     .factory('getCapital', function ($http, $q, API_PREFIX, SEARCH, USER_NAME, getCountry) {
         var path = 'http://api.geonames.org/searchJSON?';
-        return function (countryName) {
-            console.log("factory getCapital countryName");
-            console.log(countryName);
-            var country = getCountry(countryName);
-            console.log("factory getCapital country after getCountry(countryName)");
-
-            console.log(country);
+        return function (country) {
             var request = {
                 q: country.capital,
                 country: country.countryCode, // two-character country code
@@ -133,50 +131,47 @@ angular.module('cacApp', ['ngRoute', 'ngAnimate'])
     })
     .factory('getNeighbors', ['$http', '$location', function ($http, $location) {
         var i;
-        //debugger;
-        //var getNeighbors = function (countryName) {
-        return function (country) {
-            //debugger;
-            var neighbors = [];
+        return function (countryCode) {
             // do I really need geonameId?
             //var geoId = countryInfo.getCountry(country).geonameId;
-            //debugger;
             var path = 'http://api.geonames.org/neighboursJSON?';
             var request = {
                 //geonameId: geoId,
-                geonameId: country.geonameId,
-                country: country.name,
+                //geonameId: country.geonameId,
+                //country: countryName,
+                country: countryCode,
                 username: 'vinod_lala'
             };
-            if (country.name == 'Antarctica') {
-                neighbors = [];
-            } else {
-                $http({
-                    method: 'GET',
-                    url: path,
-                    cache: true,
-                    params: request
-                })
-                    .success(function (data) {
-                        debugger;
-                        if (data.geonames.length === 0) {
-                            neighbors = [];
-                        } else {
-                            for (i = 0; i < data.geonames.length; i++) {
-                                //debugger;
-                                neighbors[i] = data.geonames[i].countryName;
-                            }
-                        }
+            return $http({
+                method: 'GET',
+                url: path,
+                cache: true,
+                params: request
+            })
+                // use .then instead of .success
+                //.success(function (data) {
+                //    if (data.geonames.length === 0) {
+                //        neighbors = [];
+                //    } else {
+                //        for (i = 0; i < data.geonames.length; i++) {
+                //            neighbors[i] = data.geonames[i].countryName;
+                //        }
+                //    }
+                //
+                //})
+                //.error(function (data, status) {
+                //    console.log('Error status: ' + status);
+                //    $location.path('/error');
+                //});
 
-                    })
-                    .error(function (data, status) {
-                        console.log('Error status: ' + status);
-                        $location.path('/error');
-                    });
-            }
-            //debugger;
-            return neighbors;
-            //debugger;
+                // .then takes full response object and .success takes response.data
+                .then(function(response) {
+                    var neighbors = response.data.geonames;
+                    console.log(response);
+                    console.log(neighbors);
+                    return neighbors;
+                })
+
         };
         //return {
         //    getNeighbors: getNeighbors
@@ -327,11 +322,12 @@ angular.module('cacApp', ['ngRoute', 'ngAnimate'])
         }])
 
     //.controller('countryCtrl', function ($scope, country, capital) {
-    .controller('countryCtrl', function ($scope, country) {
-        debugger;
+    .controller('countryCtrl', function ($scope, country, neighbors) {
+        //debugger;
         console.log("in countryCtrl, country is:");
         console.log(country);
         $scope.country = country;
+        $scope.neighbors = neighbors;
         //console.log("controller capital:");
         //console.log(capital);
         //$scope.country = capital;
